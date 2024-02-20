@@ -1,58 +1,33 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: grafana
-  name: grafana
+  name: prometheus
   namespace: monitoring
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: grafana
+      app: prometheus
   template:
     metadata:
       labels:
-        app: grafana
+        app: prometheus
     spec:
-      securityContext:
-        fsGroup: 472
-        supplementalGroups:
-          - 0
       containers:
-        - name: grafana
-          image: grafana/grafana:latest
-          imagePullPolicy: IfNotPresent
+        - name: prometheus
+          image: prom/prometheus
           ports:
-            - containerPort: 3000
-              name: http-grafana
-              protocol: TCP
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /robots.txt
-              port: 3000
-              scheme: HTTP
-            initialDelaySeconds: 10
-            periodSeconds: 30
-            successThreshold: 1
-            timeoutSeconds: 2
-          livenessProbe:
-            failureThreshold: 3
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            successThreshold: 1
-            tcpSocket:
-              port: 3000
-            timeoutSeconds: 1
-          resources:
-            requests:
-              cpu: 250m
-              memory: 750Mi
+            - containerPort: 9090
           volumeMounts:
-            - mountPath: /var/lib/grafana
-              name: grafana-vol
+            - name: config-vol
+              mountPath: /etc/prometheus
+            - name: prometheus-vol
+              mountPath: /var/lib/prometheus/
       volumes:
-        - name: grafana-vol
+        - name: config-vol
+          configMap:
+            name: prometheus-config
+            defaultMode: 420
+        - name: prometheus-vol
           persistentVolumeClaim:
-            claimName: grafana-data
+            claimName: prometheus-pvc

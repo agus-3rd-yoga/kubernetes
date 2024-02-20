@@ -6,8 +6,8 @@ metadata:
     # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
     # If you are NOT using this as an addon, you should comment out this line.
     kubernetes.io/cluster-service: 'true'
-    kubernetes.io/name: grafana
-  name: grafana
+    kubernetes.io/name: prometheus
+  name: prometheus
   namespace: monitoring
 spec:
   # In a production setup, we recommend accessing Grafana through an external Loadbalancer
@@ -16,13 +16,13 @@ spec:
   # You could also use NodePort to expose the service at a randomly-generated port
   type: NodePort
   ports:
-  - name: grafana-service
+  - name: prometheus-service
     protocol: TCP
-    port: 3000
-    targetPort: http-grafana
-    nodePort: 30380
+    port: 9090
+    targetPort: http-prometheus
+    nodePort: 30980
   selector:
-    app: grafana
+    app: prometheus
   sessionAffinity: None
 
 ## Use this manifest for Loadbalancer type  

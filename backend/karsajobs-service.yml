@@ -1,0 +1,29 @@
+# Set specific API version
+apiVersion: v1
+
+# Type of kubernetes resource
+kind: Service                 
+
+# Add information for service
+metadata:
+
+  # Name of the resource
+  name: karsajobs   
+
+# Define specifications for service   
+spec:
+
+  # A port is opened on each node in your cluster
+  type: NodePort       
+
+  # Take incoming HTTP requests on port 30080 and forward them to the targetPort of pod which is port 8080          
+  ports:                         
+  - name: http
+    port: 30080
+    targetPort: 8080
+
+  # Match service to pod only for specific label
+  selector:
+
+    # Map any pod with label `app=karsajobs` to this service
+    app: karsajobs         

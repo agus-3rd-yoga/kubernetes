@@ -1,0 +1,78 @@
+# Set specific API version
+apiVersion: apps/v1
+
+# Type of Kubernetes resource
+kind: Deployment     
+
+# Add information for container/pod
+metadata:
+
+  # Name of the Kubernetes resource
+  name: karsajobs-ui
+
+# Define specifications for container/pod   
+spec:
+
+  # Number of pods to run at any given time
+  replicas: 1           
+
+  # Manage pod only for specific label
+  selector: 
+
+    # Select specific label
+    matchLabels:
+
+      # This deployment applies to any Pods matching the specified label
+      app: karsajobs-ui
+
+  # This deployment will create a set of pods using the configurations in this template      
+  template:             
+
+    # Add information for container/pod
+    metadata:
+
+      # The labels that will be applied to all of the pods in this deployment
+      labels:         
+
+        # Define label name for container/pod    
+        app: karsajobs-ui
+
+    # Set specification for container/Pod
+    spec:             
+
+      # Define image details
+      containers:
+
+      # Set container/pod name
+      - name: karsajobs-ui
+
+        # Get image from registry
+        image: docker.io/agus3rdyoga/karsajobs-ui:latest 
+
+        # Set condition for getting image
+        imagePullPolicy: IfNotPresent
+
+        # Define port mapping
+        ports:
+
+          # Should match the port number that the Go application listens on
+          - containerPort: 8080  
+
+        # To check the health of the Pod
+        livenessProbe:           
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          timeoutSeconds: 5
+
+        # To check if the Pod is ready to serve traffic or not
+        readinessProbe:          
+          httpGet:
+            path: /readiness
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 1

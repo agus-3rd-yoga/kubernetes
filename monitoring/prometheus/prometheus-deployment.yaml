@@ -1,6 +1,9 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: prometheus
   name: prometheus
   namespace: monitoring
 spec:
@@ -13,18 +16,30 @@ spec:
       labels:
         app: prometheus
     spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
       containers:
         - name: prometheus
           image: prom/prometheus
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus/"
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
               name: http-prometheus
               protocol: TCP
+          resources:
+            requests:
+              cpu: 250m
+              memory: 750Mi
           volumeMounts:
             - name: config-vol
               mountPath: /etc/prometheus
             - name: prometheus-vol
-              mountPath: /var/lib/prometheus/
+              mountPath: /prometheus
       volumes:
         - name: config-vol
           configMap:

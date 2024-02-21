@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  serviceName: mongodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:latest
+          ports:
+          - name: mongodb-tcp
+            containerPort: 27017
+          volumeMounts:
+          - name: data-vol
+            mountPath: /data/db
+      volumes:
+        - name: data-vol
+          persistentVolumeClaim:
+            claimName: mongodb-pvc

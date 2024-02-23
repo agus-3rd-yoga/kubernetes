@@ -1,8 +1,19 @@
+# Set specific API version
 apiVersion: v1
+
+# Type of Kubernetes resource
 kind: ConfigMap
+
+# Add information for resources
 metadata:
+  
+  # Name of the Kubernetes resource
   name: mongo-config
+
+# Add information for data file  
 data:
+  
+  # Set filename of file data and define with some content (fill this file with specific content related to deployment manifest)
   mongo.conf: |
     processManagement:
       fork: true

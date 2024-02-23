@@ -1,6 +1,11 @@
 ---
+# Set specific API version
 apiVersion: v1
+
+# Type of kubernetes resource
 kind: Service
+
+# Add information for service
 metadata:
   labels:
     # For use as a Cluster add-on (https://github.com/kubernetes/kubernetes/tree/master/cluster/addons)
@@ -8,16 +13,25 @@ metadata:
     kubernetes.io/cluster-service: 'true'
     kubernetes.io/name: mongodb
   name: mongodb
+
+# Define specifications for service
 spec:
   # In a production setup, we recommend accessing Grafana through an external Loadbalancer
   # or through a public IP.
   # type: LoadBalancer
   # You could also use NodePort to expose the service at a randomly-generated port
   type: ClusterIP
+
+  # Set port access
   ports:
   - name: mongodb-service
+
+    # Set target port Pod
     targetPort: mongodb-tcp
+
+    # Service port
     port: 27017
+
+  # Bind to Pod by selector name
   selector:
     app: mongodb
-  sessionAffinity: None

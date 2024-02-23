@@ -1,18 +1,40 @@
----
+# Set specific API version
 apiVersion: v1
+
+# Type of Kubernetes resource
 kind: PersistentVolume
+
+# Add information for resources
 metadata:
+  
+  # Set name for resources
   name: mongodb-pv
+
+# Define specifications for resources
 spec:
+ 
+  # Set capacity of storage
   capacity:
     storage: 10Gi
+
+  # Type of storage backup
   volumeMode: Filesystem
+
+  # Type of storage access
   accessModes:
   - ReadWriteOnce
+
+  # type of storage reclaim policy
   persistentVolumeReclaimPolicy: Delete
+
+  # Set storage class pointing
   storageClassName: local-storage
+
+  # Set mount point
   local:
     path: /data-pv/mongodb
+
+  # Set node/worker which provides storage
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -22,13 +44,26 @@ spec:
           values:
           - worker2
 ---
+# Set specific API version
 apiVersion: v1
+
+# Type of Kubernetes resource
 kind: PersistentVolumeClaim
+
+# Add information for resources
 metadata:
+
+  # Set name for resources
   name: mongodb-pvc
+
+# Define specifications for resources
 spec:
+
+  # Type of storage access
   accessModes:
     - ReadWriteOnce
+
+   # Set capacity of request storage
   resources:
     requests:
       storage: 10Gi

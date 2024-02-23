@@ -1,29 +1,52 @@
+# Set specific API version
 apiVersion: apps/v1
+
+# Type of Kubernetes resource
 kind: StatefulSet
+
+# Add information for resources
 metadata:
+
+  # Name of the Kubernetes resource
   name: mongodb
+
+# Define specifications for resources
 spec:
+
+  # Set label for pod/container
   selector:
     matchLabels:
       app: mongodb
+
+  # Set service name
   serviceName: mongodb
+
+  # Set the number of pods
   replicas: 1
   template:
     metadata:
       labels:
         app: mongodb
+
+    # Define base image
     spec:
       containers:
         - name: mongodb
           image: mongo
+
+          # Set variable for deployed base image/container
           env:
             - name: MONGO_INITDB_ROOT_USERNAME_FILE
               value: "/etc/mongo-credentials/MONGO_ROOT_USERNAME"
             - name: MONGO_INITDB_ROOT_PASSWORD_FILE
               value: "/etc/mongo-credentials/MONGO_ROOT_PASSWORD"
+          
+          # Set port for container/pod
           ports:
             - name: mongodb-tcp
               containerPort: 27017
+
+          # Set volume/persistence storage
           volumeMounts:
             - name: mongo-vol
               mountPath: /data/db
@@ -32,6 +55,8 @@ spec:
               subPath: mongo.conf
             - name: mongo-secret
               mountPath: /etc/mongo-credentials
+
+      # Define volume/persistance storage used by pod
       volumes:
         - name: mongo-vol
           persistentVolumeClaim:

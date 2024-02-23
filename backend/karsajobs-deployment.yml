@@ -57,11 +57,17 @@ spec:
         - name: APP_PORT
           value: "8080"
         - name: MONGO_HOST
-          value: "MongoDB Service"
+          value: "mongodb"
         - name: MONGO_USER
-          value: "$(MONGO_ROOT_USERNAME)"
+          valueFrom:
+            secretKeyRef:
+              name: mongo-creds
+              key: MONGO_ROOT_USERNAME
         - name: MONGO_PASS
-          value: "$(MONGO_ROOT_PASSWORD)"
+          valueFrom:
+            secretKeyRef:
+              name: mongo-creds
+              key: MONGO_ROOT_PASSWORD
 
         # Define port mapping
         ports:
@@ -78,12 +84,3 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 15
           timeoutSeconds: 5
-
-        # To check if the Pod is ready to serve traffic or not
-        readinessProbe:          
-          httpGet:
-            path: /readiness
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 5
-          timeoutSeconds: 1

@@ -56,23 +56,4 @@ spec:
         ports:
 
           # Should match the port number that the Go application listens on
-          - containerPort: 8080  
-
-        # To check the health of the Pod
-        livenessProbe:           
-          httpGet:
-            path: /health
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 15
-          timeoutSeconds: 5
-
-        # To check if the Pod is ready to serve traffic or not
-        readinessProbe:          
-          httpGet:
-            path: /readiness
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+          - containerPort: 80

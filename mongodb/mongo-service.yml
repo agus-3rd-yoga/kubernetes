@@ -17,7 +17,7 @@ spec:
   ports:
   - name: mongodb-service
     targetPort: mongodb-tcp
-    port: 3027
+    port: 27017
   selector:
     app: mongodb
   sessionAffinity: None

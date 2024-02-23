@@ -8,7 +8,7 @@ kind: Service
 metadata:
 
   # Name of the resource
-  name: karsajobs   
+  name: karsajobs-ui
 
 # Define specifications for service   
 spec:
@@ -19,11 +19,11 @@ spec:
   # Take incoming HTTP requests on port 30080 and forward them to the targetPort of pod which is port 8080          
   ports:                         
   - name: http
-    port: 30080
-    targetPort: 8080
+    port: 30443
+    targetPort: 80
 
   # Match service to pod only for specific label
   selector:
 
     # Map any pod with label `app=karsajobs` to this service
-    app: karsajobs         
+    app: karsajobs-ui

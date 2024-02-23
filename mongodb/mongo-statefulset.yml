@@ -15,14 +15,56 @@ spec:
     spec:
       containers:
         - name: mongodb
-          image: mongo:latest
+          image: mongo
+          args: ["--config /config/mongo.conf"]
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --disableImplicitSessions
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE
+              value: "/etc/mongo-credentials/MONGO_ROOT_USERNAME"
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+              value: "/etc/mongo-credentials/MONGO_ROOT_PASSWORD"
           ports:
-          - name: mongodb-tcp
-            containerPort: 27017
+            - name: mongodb-tcp
+              containerPort: 27017
           volumeMounts:
-          - name: data-vol
-            mountPath: /data/db
+            - name: mongo-vol
+              mountPath: /data/db
+            - name: mongo-conf
+              mountPath: /config/mongo.conf
+              subPath: mongo.conf
+            - name: mongo-secret
+              mountPath: /etc/mongo-credentials
       volumes:
-        - name: data-vol
+        - name: mongo-vol
           persistentVolumeClaim:
             claimName: mongodb-pvc
+        - name: mongo-secret
+          secret:
+            secretName: mongo-creds
+        - name: mongo-conf
+          configMap:
+            defaultMode: 420
+            name: mongo-config

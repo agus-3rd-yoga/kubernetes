@@ -4,13 +4,13 @@ apiVersion: apps/v1
 # Type of Kubernetes resource
 kind: Deployment     
 
-# Add information for container/pod
+# Add information for resources
 metadata:
 
   # Name of the Kubernetes resource
   name: karsajobs-ui
 
-# Define specifications for container/pod   
+# Define specifications for resources   
 spec:
 
   # Number of pods to run at any given time
@@ -28,22 +28,22 @@ spec:
   # This deployment will create a set of pods using the configurations in this template      
   template:             
 
-    # Add information for container/pod
+    # Add information for resources
     metadata:
 
       # The labels that will be applied to all of the pods in this deployment
       labels:         
 
-        # Define label name for container/pod    
+        # Define label name for resources    
         app: karsajobs-ui
 
-    # Set specification for container/Pod
+    # Set specification for resources
     spec:             
 
       # Define image details
       containers:
 
-      # Set container/pod name
+      # Set resources name
       - name: karsajobs-ui
 
         # Get image from registry

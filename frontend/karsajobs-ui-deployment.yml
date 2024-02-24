@@ -56,4 +56,4 @@ spec:
         ports:
 
           # Should match the port number that the Go application listens on
-          - containerPort: 80
+          - containerPort: 8000

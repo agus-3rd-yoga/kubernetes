@@ -16,11 +16,11 @@ spec:
   # A port is opened on each node in your cluster
   type: NodePort       
 
-  # Take incoming HTTP requests on port 30080 and forward them to the targetPort of pod which is port 8080          
+  # Take incoming HTTP requests on port 30443 and forward them to the targetPort of pod which is port 8000         
   ports:                         
   - name: http
-    port: 80
-    targetPort: 80
+    port: 8000
+    targetPort: 8000
     nodePort: 30443
 
   # Match service to pod only for specific label
